@@ -1,4 +1,4 @@
-# The Main Repository for all of Alice Zhang's Coursework and Projects
+# Alice Zhang's Coursework and Projects
 
 All projects were completed in University of Minnesota, Twin Cities coureses unless otherwise stated. 
 
