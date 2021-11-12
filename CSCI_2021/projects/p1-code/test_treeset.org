@@ -1,0 +1,1887 @@
+#+TITLE: Problem 3 treeset_main application
+# Set defaults including to use Valgrind off the bat for all tests.
+#+TESTY: PREFIX="prob3"
+#+TESTY: PROGRAM='./treeset_main -echo'
+#+TESTY: PROMPT='TS#>'
+#+TESTY: USE_VALGRIND=1
+
+* Start, Print, Quit
+Starts the program, prints what should be an empty set, then issues
+the quit command which should end the program
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> print
+TS#> quit
+#+END_SRC
+
+* Check for End of Input
+Checks that the main() loop detects EOF when scanning typed input and
+exits.  When working interactively in a Unix terminal typing Ctrl-d
+(Control "d") will indicate the end of input. When piping a script in
+this happens automatically. If this test fails, ensure main() is
+looking for EOF on scanf()/fscanf() calls and exits when detected.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> print
+#+TESTY_EOF:
+TS#>
+#+END_SRC
+
+* Find in Empty Tree
+Checks presence of the 'find' command and that it correctly indicates
+nothing is contained in the empty tree.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> print
+TS#> find apple
+NOT FOUND
+TS#> find banana
+NOT FOUND
+TS#> quit
+#+END_SRC
+
+* Add Single Item
+Adds a single item to the tree and checks that it is present while
+other items are not found.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> print
+TS#> add apple
+TS#> find apple
+FOUND
+TS#> print
+apple
+TS#> find banana
+NOT FOUND
+TS#> quit
+#+END_SRC
+
+* Add Duplicate
+Adds a single item to the tree then checks that adding it again will
+report a duplicate and leave the tree unchanged. Valgrind will verify
+that no memory is lost during this process.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> print
+TS#> add apple
+TS#> find apple
+FOUND
+TS#> add apple
+duplicate element ignored
+TS#> print
+apple
+TS#> add apple
+duplicate element ignored
+TS#> print
+apple
+TS#> find banana
+NOT FOUND
+TS#> quit
+#+END_SRC
+
+* Size Command
+Checks that the 'size' command is present and reports the correct
+number of nodes for size 0 and 1 trees.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> size
+0 nodes
+TS#> add Cartman
+TS#> size
+1 nodes
+TS#> print
+Cartman
+TS#> quit
+#+END_SRC
+
+* Three Items and Preorder
+Adds three items and ensures that the preorder command is present
+and shows correct tree structure.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Kyle
+TS#> add Stan
+TS#> size
+2 nodes
+TS#> add Cartman
+TS#> size
+3 nodes
+TS#> print
+  Stan
+Kyle
+  Cartman
+TS#> preorder
+Kyle
+  Cartman
+  Stan
+TS#> find Kyle
+FOUND
+TS#> find Kenny
+NOT FOUND
+TS#> find Stan
+FOUND
+TS#> find Cartman
+FOUND
+TS#> find Token
+NOT FOUND
+TS#> quit
+#+END_SRC
+
+* Three Items Alt Order
+Adds three items again but in an alternate order and tests proper tree
+structure for it. Tests 'find' on several items that are present / not
+present in the tree.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Kyle
+TS#> add Stan
+TS#> add Cartman
+TS#> print
+  Stan
+Kyle
+  Cartman
+TS#> size
+3 nodes
+TS#> find Stan
+FOUND
+TS#> find Kyle
+FOUND
+TS#> find Cartman
+FOUND
+TS#> find Kenny
+NOT FOUND
+TS#> find MrGarrison
+NOT FOUND
+TS#> 
+#+END_SRC
+
+* Three Items Check Duplicates
+Adds several items with duplicate detection at each step.
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Kyle
+TS#> add Stan
+TS#> add Stan
+duplicate element ignored
+TS#> add Kyle
+duplicate element ignored
+TS#> add Cartman
+TS#> print
+  Stan
+Kyle
+  Cartman
+TS#> add Cartman
+duplicate element ignored
+TS#> 
+#+END_SRC
+
+* Add Lots
+Adds a variety of items to the tree and checks that the tree structure
+prints correctly via the 'print' and 'preorder' commands. Also tests
+'find' for correct behavior.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Kyle
+TS#> add Stan
+TS#> add Cartman
+TS#> find Kenny
+NOT FOUND
+TS#> find Stan
+FOUND
+TS#> print
+  Stan
+Kyle
+  Cartman
+TS#> preorder
+Kyle
+  Cartman
+  Stan
+TS#> add Kenny
+TS#> add Butters
+TS#> add Token
+TS#> add Wendy
+TS#> add MrGarrison
+TS#> size
+8 nodes
+TS#> find Kenny
+FOUND
+TS#> find Wendy
+FOUND
+TS#> find Cartman
+FOUND
+TS#> find MrHat
+NOT FOUND
+TS#> find MrStick
+NOT FOUND
+TS#> print
+      Wendy
+    Token
+  Stan
+    MrGarrison
+Kyle
+    Kenny
+  Cartman
+    Butters
+TS#> preorder
+Kyle
+  Cartman
+    Butters
+    Kenny
+  Stan
+    MrGarrison
+    Token
+      Wendy
+TS#> add MrHat
+TS#> add MrStick
+TS#> size
+10 nodes
+TS#> print
+      Wendy
+    Token
+  Stan
+        MrStick
+      MrHat
+    MrGarrison
+Kyle
+    Kenny
+  Cartman
+    Butters
+TS#> preorder
+Kyle
+  Cartman
+    Butters
+    Kenny
+  Stan
+    MrGarrison
+      MrHat
+        MrStick
+    Token
+      Wendy
+TS#> quit
+#+END_SRC
+ 
+* Lots Duplicate Checks
+Adds a variety of items to the tree and checks that subsequent
+duplicate adds do not change the tree structure.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Kyle
+TS#> add Stan
+TS#> add Cartman
+TS#> add Kenny
+TS#> add Butters
+TS#> add Token
+TS#> add Wendy
+TS#> add MrGarrison
+TS#> size
+8 nodes
+TS#> add Kenny
+duplicate element ignored
+TS#> add Wendy
+duplicate element ignored
+TS#> size
+8 nodes
+TS#> add Cartman
+duplicate element ignored
+TS#> add Butters
+duplicate element ignored
+TS#> add Token
+duplicate element ignored
+TS#> add Token
+duplicate element ignored
+TS#> print
+      Wendy
+    Token
+  Stan
+    MrGarrison
+Kyle
+    Kenny
+  Cartman
+    Butters
+TS#> preorder
+Kyle
+  Cartman
+    Butters
+    Kenny
+  Stan
+    MrGarrison
+    Token
+      Wendy
+TS#> add MrHat
+TS#> add MrHat
+duplicate element ignored
+TS#> size
+9 nodes
+TS#> add MrStick
+TS#> add MrStick
+duplicate element ignored
+TS#> size
+10 nodes
+TS#> print
+      Wendy
+    Token
+  Stan
+        MrStick
+      MrHat
+    MrGarrison
+Kyle
+    Kenny
+  Cartman
+    Butters
+TS#> preorder
+Kyle
+  Cartman
+    Butters
+    Kenny
+  Stan
+    MrGarrison
+      MrHat
+        MrStick
+    Token
+      Wendy
+TS#> quit
+#+END_SRC
+ 
+* Add and Clear
+Adds some items then uses the 'clear' command to empty out the
+tree. Proceeds to add more items.  Tests whether nodes are correctly
+free()'d and do not cause memory leaks.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Kyle
+TS#> add Stan
+TS#> add Cartman
+TS#> size 
+3 nodes
+TS#> clear
+TS#> size 
+0 nodes
+TS#> print
+TS#> add Kenny
+TS#> add Butters
+TS#> add Token
+TS#> add Wendy
+TS#> add MrGarrison
+TS#> size
+5 nodes
+TS#> print
+    Wendy
+  Token
+    MrGarrison
+Kenny
+  Butters
+TS#> preorder
+Kenny
+  Butters
+  Token
+    MrGarrison
+    Wendy
+TS#> clear
+TS#> size 
+0 nodes
+TS#> print
+TS#> preorder
+TS#> quit
+#+END_SRC
+
+* Many Clears
+Adds items and clears several times to ensure that all malloc()'d
+memory is recouped during a 'clear' command.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> size
+0 nodes
+TS#> add Kyle
+TS#> add Stan
+TS#> add Cartman
+TS#> size
+3 nodes
+TS#> print
+  Stan
+Kyle
+  Cartman
+TS#> clear
+TS#> add Kenny
+TS#> add Butters
+TS#> size
+2 nodes
+TS#> print
+Kenny
+  Butters
+TS#> clear
+TS#> add Token
+TS#> add Wendy
+TS#> add MrGarrison
+TS#> size
+3 nodes
+TS#> print
+  Wendy
+Token
+  MrGarrison
+TS#> clear
+TS#> print
+TS#> add MrHat
+TS#> add MrStick
+TS#> add Kenny
+TS#> add CloneStan
+TS#> size
+4 nodes
+TS#> print
+  MrStick
+MrHat
+  Kenny
+    CloneStan
+TS#> clear
+TS#> size
+0 nodes
+TS#> quit
+#+END_SRC
+
+* Save Tree w/ 1 Item
+Adds a single item to a tree then saves it to a file. The file should
+contain the single item in the tree. Tests the 'save' command.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add hello
+TS#> save test-results/1.tree
+TS#> quit
+#+END_SRC
+
+*** File Checks
+Check that the contents of the saved tree file are correct.
+
+#+TESTY: use_valgrind=0
+#+TESTY: program='cat test-results/1.tree'
+#+BEGIN_SRC sh
+hello
+#+END_SRC
+
+* Save Tree w/ 3 Items
+Adds three items to the tree and saves it checking whether the items
+appear in preorder within the file.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Kyle
+TS#> add Stan
+TS#> add Cartman
+TS#> save test-results/3.tree
+TS#> quit
+#+END_SRC
+
+*** File Checks
+Check that the contents of the saved tree file are correct.
+
+#+TESTY: use_valgrind=0
+#+TESTY: program='cat test-results/3.tree'
+#+BEGIN_SRC sh
+Kyle
+ Cartman
+ Stan
+#+END_SRC
+
+* Save and Load
+Creates a tree of 4 items then saves it. Clears the tree then loads
+the tree from the save file which should restore it.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Kyle
+TS#> add Stan
+TS#> add Cartman
+TS#> add MrGarrison
+TS#> save test-results/4.tree
+TS#> clear
+TS#> print
+TS#> load test-results/4.tree
+TS#> print
+  Stan
+    MrGarrison
+Kyle
+  Cartman
+TS#> 
+#+END_SRC
+
+*** File Checks
+Check that the contents of the saved tree file are correct.
+
+#+TESTY: use_valgrind=0
+#+TESTY: program='cat test-results/4.tree'
+#+BEGIN_SRC sh
+Kyle
+ Cartman
+ Stan
+  MrGarrison
+#+END_SRC
+
+* Multiple Saves
+Creates several trees which are saved and loaded alternately. Larger
+trees are used than in previous save/load tests. Ensures proper I/O
+and memory allocation/de-allocation.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Kyle
+TS#> add Stan
+TS#> add Cartman
+TS#> add MrGarrison
+TS#> add Kenny
+TS#> save test-results/5.tree
+TS#> add Wendy
+TS#> add Token
+TS#> add Butters
+TS#> save test-results/8.tree
+TS#> load test-results/5.tree
+TS#> print
+  Stan
+    MrGarrison
+Kyle
+    Kenny
+  Cartman
+TS#> load test-results/8.tree
+TS#> print
+    Wendy
+      Token
+  Stan
+    MrGarrison
+Kyle
+    Kenny
+  Cartman
+    Butters
+TS#> 
+#+END_SRC
+
+*** File Checks
+Check that the contents of the saved tree file are correct.
+
+#+TESTY: use_valgrind=0
+#+TESTY: program='cat test-results/5.tree test-results/8.tree'
+#+BEGIN_SRC sh
+Kyle
+ Cartman
+  Kenny
+ Stan
+  MrGarrison
+Kyle
+ Cartman
+  Butters
+  Kenny
+ Stan
+  MrGarrison
+  Wendy
+   Token
+#+END_SRC
+
+* Load Existing Tree
+Create the test input tree
+
+#+TESTY: use_valgrind=0
+#+TESTY: program='bash -v'
+#+TESTY: prompt='>>'
+#+BEGIN_SRC sh
+>> echo 'MrGarrison   ' >  test-results/in.tree
+>> echo '  Butters    ' >> test-results/in.tree
+>> echo '    Cartman  ' >> test-results/in.tree
+>> echo '      Kenny  ' >> test-results/in.tree
+>> echo '        Jimmy' >> test-results/in.tree
+>> echo '  Token      ' >> test-results/in.tree
+>> echo '    Timmy    ' >> test-results/in.tree
+#+END_SRC
+
+#+TESTY: reset_options
+
+Loads an existing tree called in.tree and prints its structure out to
+check that the 'load' command works correctly independently of the
+'save' command.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> load test-results/in.tree
+TS#> size
+7 nodes
+TS#> print
+  Token
+    Timmy
+MrGarrison
+      Kenny
+        Jimmy
+    Cartman
+  Butters
+TS#> preorder
+MrGarrison
+  Butters
+    Cartman
+      Kenny
+        Jimmy
+  Token
+    Timmy
+TS#> 
+#+END_SRC
+
+* Specification Demo 
+Runs the Demo that is shown in the project specification which tests
+most of the functionality of the treeset program.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Lucas
+TS#> add Mike
+TS#> add Dustin
+TS#> add Will
+TS#> add El
+TS#> size
+5 nodes
+TS#> print
+    Will
+  Mike
+Lucas
+    El
+  Dustin
+TS#> find Mike
+FOUND
+TS#> find Nancy
+NOT FOUND
+TS#> add Nancy
+TS#> size
+6 nodes
+TS#> print
+    Will
+      Nancy
+  Mike
+Lucas
+    El
+  Dustin
+TS#> add Mike
+duplicate element ignored
+TS#> add El
+duplicate element ignored
+TS#> find Max
+NOT FOUND
+TS#> add Max
+TS#> print
+    Will
+      Nancy
+  Mike
+    Max
+Lucas
+    El
+  Dustin
+TS#> find Barb
+NOT FOUND
+TS#> add Barb
+TS#> print
+    Will
+      Nancy
+  Mike
+    Max
+Lucas
+    El
+  Dustin
+    Barb
+TS#> save test-results/stranger.tree
+TS#> clear
+TS#> size
+0 nodes
+TS#> print
+TS#> add Demigorgon
+TS#> print
+Demigorgon
+TS#> load test-results/stranger.tree
+TS#> size
+8 nodes
+TS#> print
+    Will
+      Nancy
+  Mike
+    Max
+Lucas
+    El
+  Dustin
+    Barb
+TS#> add Jim
+TS#> add Joyce
+TS#> print
+    Will
+      Nancy
+  Mike
+    Max
+Lucas
+        Joyce
+      Jim
+    El
+  Dustin
+    Barb
+TS#> load test-results/stranger.tree
+TS#> print
+    Will
+      Nancy
+  Mike
+    Max
+Lucas
+    El
+  Dustin
+    Barb
+TS#> quit
+#+END_SRC
+
+*** File Checks
+Check that the contents of the saved tree file are correct.
+
+#+TESTY: use_valgrind=0
+#+TESTY: program='cat test-results/stranger.tree'
+#+BEGIN_SRC sh
+Lucas
+ Dustin
+  Barb
+  El
+ Mike
+  Max
+  Will
+   Nancy
+#+END_SRC
+
+* Big Stress
+Adds a very large number of items to the tree to stress test the
+application.
+
+#+BEGIN_SRC sh
+Treeset Main
+Commands:
+  print:          shows contents of the tree in reverse sorted order
+  size:           prints the number of nodes currently in the tree
+  clear:          eliminates all elements from the tree
+  quit:           exit the program
+  add <name>:     inserts the given string into the tree, duplicates ignored
+  find <name>:    prints FOUND if the name is in the tree, NOT FOUND otherwise
+  preorder:       prints contents of the tree in pre-order which is how it will be saved
+  save <file>:    writes the contents of the tree in pre-order to the given file
+  load <file>:    clears the current tree and loads the one in the given file
+TS#> add Mary
+TS#> add James
+TS#> add Elizabeth
+TS#> add Barbara
+TS#> add Anthony
+TS#> add Andrew
+TS#> add Amanda
+TS#> add Alexander
+TS#> add Aaron
+TS#> add Adam
+TS#> add Abigail
+TS#> add Albert
+TS#> add Alan
+TS#> add Alice
+TS#> add Alexis
+TS#> add Amy
+TS#> add Amber
+TS#> add Andrea
+TS#> add Anna
+TS#> add Angela
+TS#> add Ann
+TS#> add Ashley
+TS#> add Arthur
+TS#> add Austin
+TS#> add David
+TS#> add Charles
+TS#> add Betty
+TS#> add Benjamin
+TS#> add Carol
+TS#> add Brian
+TS#> add Brenda
+TS#> add Brandon
+TS#> add Billy
+TS#> add Beverly
+TS#> add Bobby
+TS#> add Carl
+TS#> add Bryan
+TS#> add Bruce
+TS#> add Brittany
+TS#> add Catherine
+TS#> add Carolyn
+TS#> add Christopher
+TS#> add Christine
+TS#> add Christina
+TS#> add Cheryl
+TS#> add Christian
+TS#> add Daniel
+TS#> add Cynthia
+TS#> add Danielle
+TS#> add Dorothy
+TS#> size
+50 nodes
+TS#> print
+Mary
+  James
+    Elizabeth
+          Dorothy
+        David
+                Danielle
+              Daniel
+                Cynthia
+            Christopher
+              Christine
+                Christina
+                    Christian
+                  Cheryl
+          Charles
+                Catherine
+                  Carolyn
+              Carol
+                  Carl
+                    Bryan
+                      Bruce
+                        Brittany
+                Brian
+                  Brenda
+                    Brandon
+                        Bobby
+                      Billy
+                        Beverly
+            Betty
+              Benjamin
+      Barbara
+            Austin
+          Ashley
+            Arthur
+        Anthony
+            Anna
+                Ann
+              Angela
+          Andrew
+                Andrea
+              Amy
+                Amber
+            Amanda
+                Alice
+                  Alexis
+              Alexander
+                    Albert
+                      Alan
+                  Adam
+                    Abigail
+                Aaron
+TS#> add Donald
+TS#> add Deborah
+TS#> add Debra
+TS#> add Dennis
+TS#> add Denise
+TS#> add Diane
+TS#> add Diana
+TS#> add Donna
+TS#> add Doris
+TS#> add Edward
+TS#> add Douglas
+TS#> add Dylan
+TS#> add George
+TS#> add Emily
+TS#> add Gary
+TS#> add Eric
+TS#> add Emma
+TS#> add Frank
+TS#> add Evelyn
+TS#> add Ethan
+TS#> add Eugene
+TS#> add Frances
+TS#> add Gabriel
+TS#> add Helen
+TS#> add Gregory
+TS#> add Gerald
+TS#> add Gloria
+TS#> add Grace
+TS#> add Heather
+TS#> add Harold
+TS#> add Hannah
+TS#> add Harry
+TS#> add Jacob
+TS#> add Jack
+TS#> add Henry
+TS#> add Jacqueline
+TS#> add John
+TS#> add Jennifer
+TS#> add Jason
+TS#> add Janet
+TS#> add Jane
+TS#> add Janice
+TS#> add Jeffrey
+TS#> add Jean
+TS#> add Jessica
+TS#> add Jerry
+TS#> add Jeremy
+TS#> add Jesse
+TS#> add Joan
+TS#> size
+99 nodes
+TS#> print
+Mary
+    John
+          Joan
+        Jessica
+            Jesse
+          Jerry
+            Jeremy
+      Jennifer
+          Jeffrey
+            Jean
+        Jason
+            Janice
+          Janet
+            Jane
+  James
+            Jacqueline
+          Jacob
+            Jack
+              Henry
+        Helen
+            Heather
+                Harry
+              Harold
+                Hannah
+          Gregory
+                Grace
+              Gloria
+            Gerald
+      George
+          Gary
+                Gabriel
+              Frank
+                  Frances
+                Evelyn
+                    Eugene
+                  Ethan
+            Eric
+              Emma
+        Emily
+    Elizabeth
+            Edward
+                Dylan
+              Douglas
+          Dorothy
+                Doris
+              Donna
+            Donald
+                    Diane
+                      Diana
+                  Dennis
+                    Denise
+                Debra
+              Deborah
+        David
+                Danielle
+              Daniel
+                Cynthia
+            Christopher
+              Christine
+                Christina
+                    Christian
+                  Cheryl
+          Charles
+                Catherine
+                  Carolyn
+              Carol
+                  Carl
+                    Bryan
+                      Bruce
+                        Brittany
+                Brian
+                  Brenda
+                    Brandon
+                        Bobby
+                      Billy
+                        Beverly
+            Betty
+              Benjamin
+      Barbara
+            Austin
+          Ashley
+            Arthur
+        Anthony
+            Anna
+                Ann
+              Angela
+          Andrew
+                Andrea
+              Amy
+                Amber
+            Amanda
+                Alice
+                  Alexis
+              Alexander
+                    Albert
+                      Alan
+                  Adam
+                    Abigail
+                Aaron
+TS#> preorder
+Mary
+  James
+    Elizabeth
+      Barbara
+        Anthony
+          Andrew
+            Amanda
+              Alexander
+                Aaron
+                  Adam
+                    Abigail
+                    Albert
+                      Alan
+                Alice
+                  Alexis
+              Amy
+                Amber
+                Andrea
+            Anna
+              Angela
+                Ann
+          Ashley
+            Arthur
+            Austin
+        David
+          Charles
+            Betty
+              Benjamin
+              Carol
+                Brian
+                  Brenda
+                    Brandon
+                      Billy
+                        Beverly
+                        Bobby
+                  Carl
+                    Bryan
+                      Bruce
+                        Brittany
+                Catherine
+                  Carolyn
+            Christopher
+              Christine
+                Christina
+                  Cheryl
+                    Christian
+              Daniel
+                Cynthia
+                Danielle
+          Dorothy
+            Donald
+              Deborah
+                Debra
+                  Dennis
+                    Denise
+                    Diane
+                      Diana
+              Donna
+                Doris
+            Edward
+              Douglas
+                Dylan
+      George
+        Emily
+          Gary
+            Eric
+              Emma
+              Frank
+                Evelyn
+                  Ethan
+                    Eugene
+                  Frances
+                Gabriel
+        Helen
+          Gregory
+            Gerald
+              Gloria
+                Grace
+            Heather
+              Harold
+                Hannah
+                Harry
+          Jacob
+            Jack
+              Henry
+            Jacqueline
+    John
+      Jennifer
+        Jason
+          Janet
+            Jane
+            Janice
+          Jeffrey
+            Jean
+        Jessica
+          Jerry
+            Jeremy
+            Jesse
+          Joan
+TS#> add Joe
+TS#> add Linda
+TS#> add Joseph
+TS#> add Jonathan
+TS#> add Johnny
+TS#> add Jose
+TS#> add Jordan
+TS#> add Karen
+TS#> add Joshua
+TS#> add Justin
+TS#> add Julie
+TS#> add Joyce
+TS#> add Judith
+TS#> add Juan
+TS#> add Julia
+TS#> add Judy
+TS#> add Kimberly
+TS#> add Kenneth
+TS#> add Kathleen
+TS#> add Katherine
+TS#> add Kelly
+TS#> add Keith
+TS#> add Kathryn
+TS#> add Kayla
+TS#> add Kevin
+TS#> add Laura
+TS#> add Larry
+TS#> add Kyle
+TS#> add Lauren
+TS#> add Lawrence
+TS#> add Margaret
+TS#> add Lisa
+TS#> add Madison
+TS#> add Louis
+TS#> add Lori
+TS#> add Logan
+TS#> add Mark
+TS#> add Maria
+TS#> add Marie
+TS#> add Marilyn
+TS#> add Martha
+TS#> add Patricia
+TS#> add Michael
+TS#> add Matthew
+TS#> add Melissa
+TS#> add Megan
+TS#> add Nancy
+TS#> add Michelle
+TS#> add Nicholas
+TS#> add Nathan
+TS#> add Natalie
+TS#> add Pamela
+TS#> add Nicole
+TS#> add Olivia
+TS#> add Noah
+TS#> add Robert
+TS#> add Richard
+TS#> add Paul
+TS#> add Patrick
+TS#> add Rebecca
+TS#> add Raymond
+TS#> add Rachel
+TS#> add Peter
+TS#> add Philip
+TS#> add Ralph
+TS#> add Randy
+TS#> add William
+TS#> add Susan
+TS#> add Sarah
+TS#> add Sandra
+TS#> add Ronald
+TS#> add Roger
+TS#> add Ryan
+TS#> add Ruth
+TS#> add Roy
+TS#> add Rose
+TS#> add Russell
+TS#> add Samantha
+TS#> add Samuel
+TS#> add Sara
+TS#> add Steven
+TS#> add Stephanie
+TS#> add Sharon
+TS#> add Scott
+TS#> add Sean
+TS#> add Shirley
+TS#> add Stephen
+TS#> add Thomas
+TS#> add Terry
+TS#> add Teresa
+TS#> add Theresa
+TS#> add Timothy
+TS#> add Tiffany
+TS#> add Virginia
+TS#> add Tyler
+TS#> add Victoria
+TS#> add Vincent
+TS#> add Walter
+TS#> add Wayne
+TS#> add Zachary
+TS#> add Willie
+TS#> size
+200 nodes
+TS#> print
+        Zachary
+          Willie
+      William
+                  Wayne
+                Walter
+              Virginia
+                    Vincent
+                  Victoria
+                Tyler
+            Timothy
+              Tiffany
+          Thomas
+              Theresa
+            Terry
+              Teresa
+        Susan
+            Steven
+                Stephen
+              Stephanie
+                  Shirley
+                Sharon
+                    Sean
+                  Scott
+          Sarah
+              Sara
+            Sandra
+                    Samuel
+                  Samantha
+                Ryan
+                  Ruth
+                      Russell
+                    Roy
+                      Rose
+              Ronald
+                Roger
+    Robert
+      Richard
+          Rebecca
+            Raymond
+                  Randy
+                Ralph
+              Rachel
+                  Philip
+                Peter
+        Paul
+          Patrick
+  Patricia
+          Pamela
+              Olivia
+                Noah
+            Nicole
+        Nicholas
+          Nathan
+            Natalie
+      Nancy
+        Michelle
+    Michael
+        Melissa
+          Megan
+      Matthew
+Mary
+            Martha
+          Mark
+                Marilyn
+              Marie
+            Maria
+        Margaret
+            Madison
+              Louis
+                Lori
+                  Logan
+          Lisa
+      Linda
+                  Lawrence
+                Lauren
+              Laura
+                Larry
+                  Kyle
+            Kimberly
+                Kevin
+              Kenneth
+                  Kelly
+                    Keith
+                        Kayla
+                      Kathryn
+                Kathleen
+                  Katherine
+          Karen
+              Justin
+                Julie
+                      Julia
+                        Judy
+                    Judith
+                      Juan
+                  Joyce
+            Joshua
+        Joseph
+            Jose
+              Jordan
+          Jonathan
+            Johnny
+    John
+            Joe
+          Joan
+        Jessica
+            Jesse
+          Jerry
+            Jeremy
+      Jennifer
+          Jeffrey
+            Jean
+        Jason
+            Janice
+          Janet
+            Jane
+  James
+            Jacqueline
+          Jacob
+            Jack
+              Henry
+        Helen
+            Heather
+                Harry
+              Harold
+                Hannah
+          Gregory
+                Grace
+              Gloria
+            Gerald
+      George
+          Gary
+                Gabriel
+              Frank
+                  Frances
+                Evelyn
+                    Eugene
+                  Ethan
+            Eric
+              Emma
+        Emily
+    Elizabeth
+            Edward
+                Dylan
+              Douglas
+          Dorothy
+                Doris
+              Donna
+            Donald
+                    Diane
+                      Diana
+                  Dennis
+                    Denise
+                Debra
+              Deborah
+        David
+                Danielle
+              Daniel
+                Cynthia
+            Christopher
+              Christine
+                Christina
+                    Christian
+                  Cheryl
+          Charles
+                Catherine
+                  Carolyn
+              Carol
+                  Carl
+                    Bryan
+                      Bruce
+                        Brittany
+                Brian
+                  Brenda
+                    Brandon
+                        Bobby
+                      Billy
+                        Beverly
+            Betty
+              Benjamin
+      Barbara
+            Austin
+          Ashley
+            Arthur
+        Anthony
+            Anna
+                Ann
+              Angela
+          Andrew
+                Andrea
+              Amy
+                Amber
+            Amanda
+                Alice
+                  Alexis
+              Alexander
+                    Albert
+                      Alan
+                  Adam
+                    Abigail
+                Aaron
+TS#> find Steven
+FOUND
+TS#> find Barbara
+FOUND
+TS#> find Anakin
+NOT FOUND
+TS#> find Leia
+NOT FOUND
+TS#> find Luke
+NOT FOUND
+TS#> find Virginia
+FOUND
+TS#> save test-results/big.tree
+TS#> clear
+TS#> add Sandra
+TS#> add Ronald
+TS#> add Roger
+TS#> add Ryan
+TS#> add Ruth
+TS#> add Roy
+TS#> add Rose
+TS#> add Russell
+TS#> add Samantha
+TS#> add Samuel
+TS#> add Sara
+TS#> add Steven
+TS#> add Stephanie
+TS#> add Sharon
+TS#> add Scott
+TS#> add Sean
+TS#> add Shirley
+TS#> add Stephen
+TS#> add Thomas
+TS#> add Terry
+TS#> add Teresa
+TS#> add Theresa
+TS#> add Timothy
+TS#> add Tiffany
+TS#> add Virginia
+TS#> add Tyler
+TS#> add Victoria
+TS#> add Vincent
+TS#> add Walter
+TS#> add Wayne
+TS#> add Zachary
+TS#> add Willie
+TS#> find Sara
+FOUND
+TS#> find Virginia
+FOUND
+TS#> find Anna
+NOT FOUND
+TS#> find Kevin
+NOT FOUND
+TS#> load test-results/big.tree
+TS#> size
+200 nodes
+TS#> print
+        Zachary
+          Willie
+      William
+                  Wayne
+                Walter
+              Virginia
+                    Vincent
+                  Victoria
+                Tyler
+            Timothy
+              Tiffany
+          Thomas
+              Theresa
+            Terry
+              Teresa
+        Susan
+            Steven
+                Stephen
+              Stephanie
+                  Shirley
+                Sharon
+                    Sean
+                  Scott
+          Sarah
+              Sara
+            Sandra
+                    Samuel
+                  Samantha
+                Ryan
+                  Ruth
+                      Russell
+                    Roy
+                      Rose
+              Ronald
+                Roger
+    Robert
+      Richard
+          Rebecca
+            Raymond
+                  Randy
+                Ralph
+              Rachel
+                  Philip
+                Peter
+        Paul
+          Patrick
+  Patricia
+          Pamela
+              Olivia
+                Noah
+            Nicole
+        Nicholas
+          Nathan
+            Natalie
+      Nancy
+        Michelle
+    Michael
+        Melissa
+          Megan
+      Matthew
+Mary
+            Martha
+          Mark
+                Marilyn
+              Marie
+            Maria
+        Margaret
+            Madison
+              Louis
+                Lori
+                  Logan
+          Lisa
+      Linda
+                  Lawrence
+                Lauren
+              Laura
+                Larry
+                  Kyle
+            Kimberly
+                Kevin
+              Kenneth
+                  Kelly
+                    Keith
+                        Kayla
+                      Kathryn
+                Kathleen
+                  Katherine
+          Karen
+              Justin
+                Julie
+                      Julia
+                        Judy
+                    Judith
+                      Juan
+                  Joyce
+            Joshua
+        Joseph
+            Jose
+              Jordan
+          Jonathan
+            Johnny
+    John
+            Joe
+          Joan
+        Jessica
+            Jesse
+          Jerry
+            Jeremy
+      Jennifer
+          Jeffrey
+            Jean
+        Jason
+            Janice
+          Janet
+            Jane
+  James
+            Jacqueline
+          Jacob
+            Jack
+              Henry
+        Helen
+            Heather
+                Harry
+              Harold
+                Hannah
+          Gregory
+                Grace
+              Gloria
+            Gerald
+      George
+          Gary
+                Gabriel
+              Frank
+                  Frances
+                Evelyn
+                    Eugene
+                  Ethan
+            Eric
+              Emma
+        Emily
+    Elizabeth
+            Edward
+                Dylan
+              Douglas
+          Dorothy
+                Doris
+              Donna
+            Donald
+                    Diane
+                      Diana
+                  Dennis
+                    Denise
+                Debra
+              Deborah
+        David
+                Danielle
+              Daniel
+                Cynthia
+            Christopher
+              Christine
+                Christina
+                    Christian
+                  Cheryl
+          Charles
+                Catherine
+                  Carolyn
+              Carol
+                  Carl
+                    Bryan
+                      Bruce
+                        Brittany
+                Brian
+                  Brenda
+                    Brandon
+                        Bobby
+                      Billy
+                        Beverly
+            Betty
+              Benjamin
+      Barbara
+            Austin
+          Ashley
+            Arthur
+        Anthony
+            Anna
+                Ann
+              Angela
+          Andrew
+                Andrea
+              Amy
+                Amber
+            Amanda
+                Alice
+                  Alexis
+              Alexander
+                    Albert
+                      Alan
+                  Adam
+                    Abigail
+                Aaron
+TS#> find Sara
+FOUND
+TS#> find Virginia
+FOUND
+TS#> find Anna
+FOUND
+TS#> find Kevin
+FOUND
+TS#> 
+#+END_SRC
