@@ -1,0 +1,12 @@
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+ERROR: Symbol 'notthere' not found

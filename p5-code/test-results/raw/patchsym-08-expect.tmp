@@ -1,0 +1,35 @@
+>> cp test-input/greet_funcs.o test-input/greet_funcs2.o
+>> gcc -o test-input/greet_main2 test-input/greet_main.o test-input/greet_funcs2.o
+>> test-input/greet_main2
+Hello fine folks!
+Hello fine folks!
+Hello fine folks!
+Hello fine folks!
+Hello fine folks!
+>> ./patchsym test-input/greet_funcs2.o greeting string 'Whazzzzup!?'
+SET mode
+.data section
+- 3 section index
+- 96 bytes offset from start of file
+- 0x0 preferred virtual address for .data
+.symtab section
+- 9 section index
+- 240 bytes offset from start of file
+- 312 bytes total size
+- 24 bytes per entry
+- 13 entries
+Found Symbol 'greeting'
+- 8 symbol index
+- 0x0 value
+- 64 size
+- 3 section index
+- 0 offset in .data of value for symbol
+string value: 'Hello fine folks!'
+New val is: 'Whazzzzup!?'
+>> gcc -o test-input/greet_main2 test-input/greet_main.o test-input/greet_funcs2.o
+>> test-input/greet_main2
+Whazzzzup!?
+Whazzzzup!?
+Whazzzzup!?
+Whazzzzup!?
+Whazzzzup!?

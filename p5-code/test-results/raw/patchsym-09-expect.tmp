@@ -1,0 +1,56 @@
+>> ./patchsym test-input/globals.c string1 string
+GET mode
+ERROR: Magic bytes wrong, this is not an ELF file
+>> ./patchsym test-input/naked_globals string1 string
+GET mode
+ERROR: Couldn't find symbol table
+>> ./patchsym test-input/globals nada string
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+ERROR: Symbol 'nada' not found
+>> ./patchsym test-input/globals main string
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'main'
+- 65 symbol index
+- 0x1139 value
+- 173 size
+- 13 section index
+ERROR: 'main' in section 13, not in .data section 23
+>> ./patchsym test-input/globals string2 unknown
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string2'
+- 66 symbol index
+- 0x4060 value
+- 64 size
+- 23 section index
+- 64 offset in .data of value for symbol
+ERROR: Unsupported data kind 'unknown'

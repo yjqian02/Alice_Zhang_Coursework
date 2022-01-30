@@ -1,0 +1,37 @@
+>> cp test-input/quote_main test-input/quote_main2
+>> test-input/quote_main2 2
+Complete this sentence by C++ creator Bjarne Stroustrup:
+C makes it easy to shoot yourself in the foot; ...
+
+enter a number from 0 to 15 on command line
+2: Java prevents you from shooting yourself in the foot by cutting off all your fingers.
+
+Have a nice tall glass of ... NOPE.
+>> ./patchsym test-input/quote_main2 correct string 'Java prevents you from shooting yourself in the foot by cutting off all your fingers.'
+SET mode
+.data section
+- 23 section index
+- 12352 bytes offset from start of file
+- 0x4040 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 16528 bytes offset from start of file
+- 1824 bytes total size
+- 24 bytes per entry
+- 76 entries
+Found Symbol 'correct'
+- 75 symbol index
+- 0x4060 value
+- 128 size
+- 23 section index
+- 32 offset in .data of value for symbol
+string value: 'C++ makes it harder, but when you do, it blows away your whole leg.'
+New val is: 'Java prevents you from shooting yourself in the foot by cutting off all your fingers.'
+>> test-input/quote_main2 2
+Complete this sentence by C++ creator Bjarne Stroustrup:
+C makes it easy to shoot yourself in the foot; ...
+
+enter a number from 0 to 15 on command line
+2: Java prevents you from shooting yourself in the foot by cutting off all your fingers.
+
+Correct!

@@ -1,0 +1,12 @@
+WARNING: expected host 'csel-kh1250-NN' but got host 'Clark'
+WARNING: timing results / scoring will not reflect actual scoring
+WARNING: run on host 'csel-kh1250-NN' for accurate results
+==== Matrix Square Benchmark Version 1 ====
+  SIZE       BASE       OPTM  SPDUP   LOG2 FACTOR POINTS 
+   273 7.9359e-01 8.1420e-01   0.97   0.00   1.00   0.00 
+   512 9.3414e+00 5.4790e+00   1.70   0.77   1.88   1.44 
+RAW POINTS: 1.44
+TOTAL POINTS: 1 / 35
+WARNING: expected host 'csel-kh1250-NN' but got host 'Clark'
+WARNING: timing results / scoring will not reflect actual scoring
+WARNING: run on host 'csel-kh1250-NN' for accurate results

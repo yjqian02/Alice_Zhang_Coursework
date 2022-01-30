@@ -1,0 +1,75 @@
+>> cp test-input/globals test-input/globals2
+>> test-input/globals2
+string1: Hello
+string2: Goodbye cruel world
+string3: All your bass
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+>> ./patchsym test-input/globals2 string1 string 'Adios!'
+SET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string1'
+- 53 symbol index
+- 0x4040 value
+- 8 size
+- 23 section index
+- 32 offset in .data of value for symbol
+string value: 'Hello'
+New val is: 'Adios!'
+>> ./patchsym test-input/globals2 string2 string 'Say hello to a new day.'
+SET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string2'
+- 66 symbol index
+- 0x4060 value
+- 64 size
+- 23 section index
+- 64 offset in .data of value for symbol
+string value: 'Goodbye cruel world'
+New val is: 'Say hello to a new day.'
+>> ./patchsym test-input/globals2 string3 string 'Move ZIG!'
+SET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string3'
+- 52 symbol index
+- 0x40a0 value
+- 16 size
+- 23 section index
+- 128 offset in .data of value for symbol
+string value: 'All your bass'
+New val is: 'Move ZIG!'
+>> test-input/globals2
+string1: Adios!
+string2: Say hello to a new day.
+string3: Move ZIG!
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567

@@ -1,0 +1,524 @@
+#+TITLE: patchsym tests
+#+TESTY: ECHOING="input"
+#+TESTY: PROMPT=">>"
+#+TESTY: USE_VALGRIND='1'
+#+TESTY: PREFIX="patchsym"
+
+* get globals string1
+** Setup
+First run the test-input/globals program to ensure it has the correct
+output.
+
+#+TESTY: program='test-input/globals'
+#+BEGIN_SRC sh
+string1: Hello
+string2: Goodbye cruel world
+string3: All your bass
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+#+END_SRC
+
+** patchsym output
+Run patchsym to retrieve the value of variable 'string1' from the
+program test-input/globals.
+
+#+TESTY: program='./patchsym test-input/globals string1 string'
+#+BEGIN_SRC sh
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string1'
+- 53 symbol index
+- 0x4040 value
+- 8 size
+- 23 section index
+- 32 offset in .data of value for symbol
+string value: 'Hello'
+#+END_SRC
+
+* get globals string2
+** Setup
+First run the test-input/globals program to ensure it has the correct
+output.
+
+#+TESTY: program='test-input/globals'
+#+BEGIN_SRC sh
+string1: Hello
+string2: Goodbye cruel world
+string3: All your bass
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+#+END_SRC
+
+** patchsym output
+Run patchsym to retrieve the value of variable 'string2' from the
+program test-input/globals.
+
+#+TESTY: program='./patchsym test-input/globals string2 string'
+#+BEGIN_SRC sh
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string2'
+- 66 symbol index
+- 0x4060 value
+- 64 size
+- 23 section index
+- 64 offset in .data of value for symbol
+string value: 'Goodbye cruel world'
+#+END_SRC
+
+* get globals notthere
+Run patchsym to retrieve the value of variable 'notthere' from the
+program test-input/globals. This variable does not exist and patchsym
+should report as much.
+
+#+TESTY: program='./patchsym test-input/globals notthere string'
+#+BEGIN_SRC sh
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+ERROR: Symbol 'notthere' not found
+#+END_SRC
+
+* set globals string1
+** Setup
+Make a copy of the test-input/globals program that will be modified by
+patchsym and check its output.
+
+#+TESTY: use_valgrind=0
+#+BEGIN_SRC sh
+>> cp test-input/globals test-input/globals2
+>> test-input/globals2
+string1: Hello
+string2: Goodbye cruel world
+string3: All your bass
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+#+END_SRC
+
+** patchsym output
+Run patchsym to find and change the value of variable 'string1' in
+the program test-input/globals2.
+
+#+TESTY: use_valgrind=1
+#+TESTY: program="./patchsym test-input/globals2 string1 string 'ADIOS!'"
+#+BEGIN_SRC sh
+SET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string1'
+- 53 symbol index
+- 0x4040 value
+- 8 size
+- 23 section index
+- 32 offset in .data of value for symbol
+string value: 'Hello'
+New val is: 'ADIOS!'
+#+END_SRC
+
+** Verify
+Check that after patchsym is used to set string to 'ADIOS!' that
+running globals2 shows the value of the changed string.
+
+#+TESTY: use_valgrind=1
+#+TESTY: program='test-input/globals2'
+#+BEGIN_SRC sh
+string1: ADIOS!
+string2: Goodbye cruel world
+string3: All your bass
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+#+END_SRC
+
+
+* set globals string3
+** Setup
+Make a copy of the test-input/globals program that will be modified by
+patchsym and check its output.
+
+#+TESTY: use_valgrind=0
+#+BEGIN_SRC sh
+>> cp test-input/globals test-input/globals2
+>> test-input/globals2
+string1: Hello
+string2: Goodbye cruel world
+string3: All your bass
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+#+END_SRC
+
+** patchsym output
+Run patchsym to find and change the value of variable 'string3' in
+the program test-input/globals2.
+
+#+TESTY: use_valgrind=1
+#+TESTY: program="./patchsym test-input/globals2 string3 string 'Move ZIG!'"
+#+BEGIN_SRC sh
+SET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string3'
+- 52 symbol index
+- 0x40a0 value
+- 16 size
+- 23 section index
+- 128 offset in .data of value for symbol
+string value: 'All your bass'
+New val is: 'Move ZIG!'
+#+END_SRC
+
+** Verify
+Check that after patchsym is used to set string to 'Move ZIG!' that
+running globals2 shows the value of the changed string.
+
+#+TESTY: use_valgrind=1
+#+TESTY: program='test-input/globals2'
+#+BEGIN_SRC sh
+string1: Hello
+string2: Goodbye cruel world
+string3: Move ZIG!
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+#+END_SRC
+
+* set globals string1-3
+This test checks that several consecutive runs of patchsym stack and
+affect the specified executable. It only checks altering string
+values. Note: Valgrind is not used in this test so if there are memory
+problems, they may be harder to diagnose.
+
+#+TESTY: use_valgrind=0
+#+BEGIN_SRC sh
+>> cp test-input/globals test-input/globals2
+>> test-input/globals2
+string1: Hello
+string2: Goodbye cruel world
+string3: All your bass
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+>> ./patchsym test-input/globals2 string1 string 'Adios!'
+SET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string1'
+- 53 symbol index
+- 0x4040 value
+- 8 size
+- 23 section index
+- 32 offset in .data of value for symbol
+string value: 'Hello'
+New val is: 'Adios!'
+>> ./patchsym test-input/globals2 string2 string 'Say hello to a new day.'
+SET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string2'
+- 66 symbol index
+- 0x4060 value
+- 64 size
+- 23 section index
+- 64 offset in .data of value for symbol
+string value: 'Goodbye cruel world'
+New val is: 'Say hello to a new day.'
+>> ./patchsym test-input/globals2 string3 string 'Move ZIG!'
+SET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string3'
+- 52 symbol index
+- 0x40a0 value
+- 16 size
+- 23 section index
+- 128 offset in .data of value for symbol
+string value: 'All your bass'
+New val is: 'Move ZIG!'
+>> test-input/globals2
+string1: Adios!
+string2: Say hello to a new day.
+string3: Move ZIG!
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+#+END_SRC
+
+* set quote_main2 correct
+This test checks that several consecutive runs of patchsym stack and
+affect the specified executable. It only checks altering string
+values. Note: Valgrind is not used in this test so if there are memory
+problems, they may be harder to diagnose.
+
+#+TESTY: use_valgrind=0
+#+BEGIN_SRC sh
+>> cp test-input/quote_main test-input/quote_main2
+>> test-input/quote_main2 2
+Complete this sentence by C++ creator Bjarne Stroustrup:
+C makes it easy to shoot yourself in the foot; ...
+
+enter a number from 0 to 15 on command line
+2: Java prevents you from shooting yourself in the foot by cutting off all your fingers.
+
+Have a nice tall glass of ... NOPE.
+>> ./patchsym test-input/quote_main2 correct string 'Java prevents you from shooting yourself in the foot by cutting off all your fingers.'
+SET mode
+.data section
+- 23 section index
+- 12352 bytes offset from start of file
+- 0x4040 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 16528 bytes offset from start of file
+- 1824 bytes total size
+- 24 bytes per entry
+- 76 entries
+Found Symbol 'correct'
+- 75 symbol index
+- 0x4060 value
+- 128 size
+- 23 section index
+- 32 offset in .data of value for symbol
+string value: 'C++ makes it harder, but when you do, it blows away your whole leg.'
+New val is: 'Java prevents you from shooting yourself in the foot by cutting off all your fingers.'
+>> test-input/quote_main2 2
+Complete this sentence by C++ creator Bjarne Stroustrup:
+C makes it easy to shoot yourself in the foot; ...
+
+enter a number from 0 to 15 on command line
+2: Java prevents you from shooting yourself in the foot by cutting off all your fingers.
+
+Correct!
+#+END_SRC
+
+* set greet_funcs.o greeting
+This test checks that several consecutive runs of patchsym stack and
+affect the specified executable. It only checks altering string
+values. Note: Valgrind is not used in this test so if there are memory
+problems, they may be harder to diagnose.
+
+#+TESTY: use_valgrind=0
+#+BEGIN_SRC sh
+>> cp test-input/greet_funcs.o test-input/greet_funcs2.o
+>> gcc -o test-input/greet_main2 test-input/greet_main.o test-input/greet_funcs2.o
+>> test-input/greet_main2
+Hello fine folks!
+Hello fine folks!
+Hello fine folks!
+Hello fine folks!
+Hello fine folks!
+>> ./patchsym test-input/greet_funcs2.o greeting string 'Whazzzzup!?'
+SET mode
+.data section
+- 3 section index
+- 96 bytes offset from start of file
+- 0x0 preferred virtual address for .data
+.symtab section
+- 9 section index
+- 240 bytes offset from start of file
+- 312 bytes total size
+- 24 bytes per entry
+- 13 entries
+Found Symbol 'greeting'
+- 8 symbol index
+- 0x0 value
+- 64 size
+- 3 section index
+- 0 offset in .data of value for symbol
+string value: 'Hello fine folks!'
+New val is: 'Whazzzzup!?'
+>> gcc -o test-input/greet_main2 test-input/greet_main.o test-input/greet_funcs2.o
+>> test-input/greet_main2
+Whazzzzup!?
+Whazzzzup!?
+Whazzzzup!?
+Whazzzzup!?
+Whazzzzup!?
+#+END_SRC
+
+* Basic Error Conditions 
+Checks several error condtions for patchsym such as checking that the
+file format is an ELF file, that a symbol table is present, that
+symbols that are not found trigger an error, and that symbols of the
+wrong type (functions) are not changed. Also checks that the parameter
+indicating the symbol variable type is checked so that if it is not
+one of string / int / etc. an error is indicated.
+
+Note: if memory errors occur, may need to use Valgrind manually to
+help diagnose them.
+
+#+TESTY: use_valgrind=0
+#+BEGIN_SRC sh
+>> ./patchsym test-input/globals.c string1 string
+GET mode
+ERROR: Magic bytes wrong, this is not an ELF file
+>> ./patchsym test-input/naked_globals string1 string
+GET mode
+ERROR: Couldn't find symbol table
+>> ./patchsym test-input/globals nada string
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+ERROR: Symbol 'nada' not found
+>> ./patchsym test-input/globals main string
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'main'
+- 65 symbol index
+- 0x1139 value
+- 173 size
+- 13 section index
+ERROR: 'main' in section 13, not in .data section 23
+>> ./patchsym test-input/globals string2 unknown
+GET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string2'
+- 66 symbol index
+- 0x4060 value
+- 64 size
+- 23 section index
+- 64 offset in .data of value for symbol
+ERROR: Unsupported data kind 'unknown'
+#+END_SRC
+
+* String Too Long
+Checks that if the input string is longer than the existing string no
+action is taken as there is not enough space for the new string
+without overwriting other nearby data.
+
+#+TESTY: use_valgrind=0
+#+BEGIN_SRC sh
+>> cp test-input/globals test-input/globals2
+>> test-input/globals2
+string1: Hello
+string2: Goodbye cruel world
+string3: All your bass
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+>> ./patchsym test-input/globals2 string1 string 'Adios, muchachos. Lo siento.'
+SET mode
+.data section
+- 23 section index
+- 12320 bytes offset from start of file
+- 0x4020 preferred virtual address for .data
+.symtab section
+- 26 section index
+- 12504 bytes offset from start of file
+- 1680 bytes total size
+- 24 bytes per entry
+- 70 entries
+Found Symbol 'string1'
+- 53 symbol index
+- 0x4040 value
+- 8 size
+- 23 section index
+- 32 offset in .data of value for symbol
+string value: 'Hello'
+ERROR: Cannot change symbol 'string1': existing size too small
+Cur Size: 8 'Hello'
+New Size: 29 'Adios, muchachos. Lo siento.'
+>> test-input/globals2
+string1: Hello
+string2: Goodbye cruel world
+string3: All your bass
+int1: aabbccdd
+int2: ffeeddcc
+a_doub: 1.234567
+#+END_SRC
+
