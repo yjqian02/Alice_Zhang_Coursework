@@ -2,7 +2,7 @@
 
 All projects were completed in University of Minnesota, Twin Cities coureses unless otherwise stated. 
 
-Projects are sorted by course and labed as follows:
+Projects are sorted by course and labeled as follows:
 
 CSCI 1133: Introduction to Programming Principles in Python
 
