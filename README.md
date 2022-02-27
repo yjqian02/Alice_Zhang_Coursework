@@ -1,6 +1,6 @@
 # Alice Zhang's Coursework and Projects
 
-All projects were completed in University of Minnesota, Twin Cities coureses unless otherwise stated. 
+All projects were completed in University of Minnesota, Twin Cities courses unless otherwise stated. 
 
 Projects are sorted by course and labeled as follows:
 
